@@ -205,25 +205,45 @@
   }
 
   /* WORK */
-  .work-list{display:flex; flex-direction:column; border-top:1px solid var(--line);}
+  .work-list{display:grid; grid-template-columns:repeat(3, 1fr); gap:22px;}
   .work-item{
-    display:grid; grid-template-columns:60px 1fr auto; align-items:center; gap:24px;
-    padding:26px 4px; border-bottom:1px solid var(--line);
-    transition:background .2s ease, padding-left .2s ease;
+    position:relative; display:block; border-radius:var(--radius); overflow:hidden;
+    aspect-ratio:9/13; background:var(--ink); border:1px solid var(--line);
+    transition:transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s ease;
   }
-  .work-item:hover{background:var(--panel); padding-left:14px;}
-  .work-item .idx{font-family:'Space Mono',monospace; color:var(--ink-soft); font-size:14px;}
-  .work-item .title{font-size:20px; font-weight:700;}
-  .work-item .desc{color:var(--ink-soft); font-size:14px; margin-top:4px; font-weight:400;}
-  .play{
-    width:44px; height:44px; border-radius:50%; border:1.5px solid var(--ink);
+  .work-item:hover{transform:translateY(-6px); box-shadow:0 24px 44px -22px rgba(26,24,18,.4);}
+  .work-item .thumb{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    transition:transform .5s ease;
+  }
+  .work-item:hover .thumb{transform:scale(1.06);}
+  .work-item .shade{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(26,24,18,0) 40%, rgba(26,24,18,.88) 100%);
+  }
+  .work-item .cat{
+    position:absolute; top:14px; left:14px;
+    background:rgba(251,247,239,.92); color:var(--ink);
+    font-size:12px; font-weight:700; padding:6px 12px; border-radius:999px;
+    letter-spacing:0.01em;
+  }
+  .work-item .idx{
+    position:absolute; top:14px; right:14px;
+    font-family:'Space Mono',monospace; font-size:12px; color:#fff; opacity:.85;
+  }
+  .work-item .play{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) scale(.85);
+    width:52px; height:52px; border-radius:50%; background:rgba(251,247,239,.92);
     display:flex; align-items:center; justify-content:center;
-    transition:background .2s ease, border-color .2s ease, transform .2s ease;
-    flex-shrink:0;
+    opacity:0; transition:opacity .25s ease, transform .25s ease;
   }
-  .work-item:hover .play{background:var(--orange); border-color:var(--orange); transform:scale(1.08);}
-  .play svg{width:14px; height:14px; fill:var(--ink); transition:fill .2s ease;}
-  .work-item:hover .play svg{fill:#fff;}
+  .work-item:hover .play{opacity:1; transform:translate(-50%,-50%) scale(1);}
+  .play svg{width:16px; height:16px; fill:var(--ink); margin-left:2px;}
+  .work-item .caption{
+    position:absolute; left:16px; right:16px; bottom:16px; color:#fff;
+  }
+  .work-item .title{font-size:16px; font-weight:700;}
+  .work-item .desc{font-size:12px; color:#D8D3C4; margin-top:3px; font-weight:400;}
 
   /* CONTACT */
   .contact-panel{
@@ -250,8 +270,7 @@
     .photo-card{justify-self:start; margin-top:40px;}
     .about-grid{grid-template-columns:1fr; gap:40px;}
     .services{grid-template-columns:1fr;}
-    .work-item{grid-template-columns:40px 1fr; row-gap:8px;}
-    .work-item .play{grid-column:2; justify-self:start;}
+    .work-list{grid-template-columns:repeat(2, 1fr); gap:14px;}
     .facts{grid-template-columns:1fr;}
     .navlinks{display:none;}
     .contact-panel{padding:44px 24px;}
@@ -361,48 +380,63 @@
     <div class="work-list">
 
       <a class="work-item" href="https://drive.google.com/file/d/1aSYDAWIBm8yWtco5vWr2XKJymEllNJhT/view?usp=drive_link" target="_blank" rel="noopener">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1aSYDAWIBm8yWtco5vWr2XKJymEllNJhT&sz=w800" alt="Medical reel edit" loading="lazy" onerror="this.style.display='none'">
+        <div class="shade"></div>
+        <span class="cat">Medical</span>
         <span class="idx">01</span>
-        <div>
-          <div class="title">Reel edit</div>
-          <div class="desc">Fast-paced reel cut, edited for retention</div>
-        </div>
         <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="caption">
+          <div class="title">Clinic Reel</div>
+          <div class="desc">Fast-paced reel edit for a dental clinic</div>
+        </div>
       </a>
 
       <a class="work-item" href="https://drive.google.com/file/d/1k5hNMJ7hv9MzBpJGmIk53ShW2sr4bUK1/view?usp=drive_link" target="_blank" rel="noopener">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1k5hNMJ7hv9MzBpJGmIk53ShW2sr4bUK1&sz=w800" alt="Medical social content" loading="lazy" onerror="this.style.display='none'">
+        <div class="shade"></div>
+        <span class="cat">Medical</span>
         <span class="idx">02</span>
-        <div>
-          <div class="title">Social content</div>
-          <div class="desc">Short-form edit for social media</div>
-        </div>
         <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="caption">
+          <div class="title">Clinic Social Content</div>
+          <div class="desc">Short-form edit for a dental clinic's page</div>
+        </div>
       </a>
 
       <a class="work-item" href="https://drive.google.com/file/d/1Lm6mL2yY1cAMpj3tDpRSX2stM4OlEAho/view?usp=drive_link" target="_blank" rel="noopener">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1Lm6mL2yY1cAMpj3tDpRSX2stM4OlEAho&sz=w800" alt="Medical promotional video" loading="lazy" onerror="this.style.display='none'">
+        <div class="shade"></div>
+        <span class="cat">Medical</span>
         <span class="idx">03</span>
-        <div>
-          <div class="title">Promotional video</div>
-          <div class="desc">Brand edit with motion graphics and color grading</div>
-        </div>
         <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="caption">
+          <div class="title">Clinic Promo</div>
+          <div class="desc">Promotional edit with motion graphics and color</div>
+        </div>
       </a>
 
       <a class="work-item" href="https://drive.google.com/file/d/1CV0L2FZgpd2GKP-oqm4uYGXPHRiq9jfm/view?usp=drive_link" target="_blank" rel="noopener">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1CV0L2FZgpd2GKP-oqm4uYGXPHRiq9jfm&sz=w800" alt="Medical long-form edit" loading="lazy" onerror="this.style.display='none'">
+        <div class="shade"></div>
+        <span class="cat">Medical</span>
         <span class="idx">04</span>
-        <div>
-          <div class="title">Long-form edit</div>
-          <div class="desc">Full-length video — pacing, cuts, and structure</div>
-        </div>
         <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="caption">
+          <div class="title">Clinic Highlights</div>
+          <div class="desc">Long-form edit — pacing, cuts, and structure</div>
+        </div>
       </a>
 
       <a class="work-item" href="https://drive.google.com/file/d/1DaQc-8bMbxqfGhZpci-AhHYp9tNqZU-U/view?usp=drive_link" target="_blank" rel="noopener">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1DaQc-8bMbxqfGhZpci-AhHYp9tNqZU-U&sz=w800" alt="Restaurant reel" loading="lazy" onerror="this.style.display='none'">
+        <div class="shade"></div>
+        <span class="cat">Restaurant</span>
         <span class="idx">05</span>
-        <div>
-          <div class="title">Podcast episode</div>
-          <div class="desc">Long-form podcast edit — audio sync, cuts, and pacing</div>
-        </div>
         <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="caption">
+          <div class="title">Restaurant Reel</div>
+          <div class="desc">Social reel edit for a restaurant</div>
+        </div>
       </a>
 
     </div>
