@@ -146,16 +146,6 @@
     animation:orbPulse 4s ease-in-out infinite;
   }
   @keyframes orbPulse{0%,100%{transform:scale(1); opacity:.75;}50%{transform:scale(1.18); opacity:1;}}
-  .logo-ring{
-    position:absolute; border-radius:50%; pointer-events:none;
-    background:conic-gradient(from 0deg, transparent 0%, rgba(234,88,12,.9) 8%, transparent 22%, transparent 50%, rgba(234,88,12,.55) 58%, transparent 72%);
-    -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
-    mask:radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
-  }
-  .ring-a{inset:-48px; animation:spinRing 7s linear infinite;}
-  .ring-b{inset:-68px; opacity:.55; animation:spinRingRev 11s linear infinite;}
-  @keyframes spinRing{to{transform:rotate(360deg);}}
-  @keyframes spinRingRev{to{transform:rotate(-360deg);}}
   .logo-shock{
     position:absolute; inset:-6px; border-radius:50%;
     border:2px solid rgba(234,88,12,.65);
@@ -202,7 +192,7 @@
     opacity:0;
     animation:none;
   }
-  .hero-play .hero h1 .word{animation:heroWordIn .9s cubic-bezier(.16,1,.3,1) var(--d,0s) forwards;}
+  .hero-play h1 .word{animation:heroWordIn .9s cubic-bezier(.16,1,.3,1) var(--d,0s) forwards;}
   @keyframes heroWordIn{
     0%{transform:translateY(115%) rotateX(-65deg); opacity:0;}
     100%{transform:translateY(0) rotateX(0deg); opacity:1;}
@@ -219,7 +209,7 @@
     opacity:0; transform:translateY(16px);
     animation:none;
   }
-  .hero-play .hero .role{animation:heroFade .8s cubic-bezier(.16,1,.3,1) .55s forwards;}
+  .hero-play .role{animation:heroFade .8s cubic-bezier(.16,1,.3,1) .55s forwards;}
   .hero-actions{display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; justify-content:center;
     opacity:0; transform:translateY(16px);
     animation:none;
@@ -409,8 +399,6 @@
       <div id="heroAnim">
         <div class="logo-hero">
           <div class="logo-orb"></div>
-          <div class="logo-ring ring-a"></div>
-          <div class="logo-ring ring-b"></div>
           <div class="logo-shock"></div>
           <span class="spark" style="--tx:58px; --ty:-14px;"></span>
           <span class="spark" style="--tx:-52px; --ty:-28px;"></span>
