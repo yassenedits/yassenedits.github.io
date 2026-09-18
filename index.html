@@ -266,6 +266,39 @@
   .service p{color:var(--text-soft); font-size:15px;}
 
   /* WORK */
+  .filter-tabs{
+    position:relative; display:inline-flex; gap:2px; padding:5px; margin-bottom:36px;
+    background:rgba(20,20,20,.4);
+    backdrop-filter:blur(28px) saturate(200%); -webkit-backdrop-filter:blur(28px) saturate(200%);
+    border:1px solid rgba(255,255,255,.14); border-radius:999px;
+    box-shadow:0 8px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  .filter-indicator{
+    position:absolute; top:5px; left:5px; height:calc(100% - 10px); width:0;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.3); border-radius:999px;
+    transition:left .35s cubic-bezier(.16,1,.3,1), width .35s cubic-bezier(.16,1,.3,1);
+    z-index:1;
+  }
+  .filter-tab{
+    position:relative; z-index:2; background:none; border:0; cursor:pointer;
+    padding:9px 18px; border-radius:999px; font-size:14px; font-weight:600;
+    font-family:'Inter', sans-serif; color:var(--text-soft);
+    transition:color .3s ease; white-space:nowrap;
+  }
+  .filter-tab.active, .filter-tab:hover{color:var(--text);}
+  .work-item.filtered-out{
+    opacity:0 !important; transform:scale(.92) !important; filter:blur(6px);
+    pointer-events:none; position:absolute; visibility:hidden;
+  }
+  .watch-hint{
+    position:absolute; bottom:16px; right:16px; z-index:2;
+    background:rgba(255,255,255,.16); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.3); border-radius:999px;
+    padding:6px 13px; font-size:11.5px; font-weight:700; color:#fff; letter-spacing:.03em;
+    opacity:0; transform:translateY(6px);
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .work-item:hover .watch-hint{opacity:1; transform:translateY(0);}
   .work-list{display:grid; grid-template-columns:repeat(3, 1fr); gap:22px;}
   .work-item{
     position:relative; display:block; border-radius:var(--radius); overflow:hidden;
@@ -370,7 +403,7 @@
     border:1px solid rgba(245,245,245,.12);
     box-shadow:0 30px 70px -20px rgba(0,0,0,.7);
   }
-  .video-modal-body iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+  .video-modal-body iframe, .video-modal-body video{position:absolute; inset:0; width:100%; height:100%; border:0; background:#000;}
   .video-modal-close{
     position:absolute; top:-46px; right:0; z-index:3;
     width:38px; height:38px; border-radius:50%;
@@ -513,95 +546,136 @@
   <section id="work">
     <div class="section-head reveal">
       <h2>My Work</h2>
-      <span class="tc">3 / 8 CLIPS</span>
+      <span class="tc">3 / 10 CLIPS</span>
     </div>
-    <div class="work-list">
 
-      <a class="work-item reveal" href="https://drive.google.com/file/d/1Dx9OaJMf3uBjk_UV3BXqNj0QSEuInqzk/view?usp=drive_link" onclick="return openVideoModal(event, &quot;1Dx9OaJMf3uBjk_UV3BXqNj0QSEuInqzk&quot;)">
-        <img class="thumb" src="https://drive.google.com/thumbnail?id=1Dx9OaJMf3uBjk_UV3BXqNj0QSEuInqzk&sz=w800" alt="Marketing ads edit" loading="lazy" onerror="handleThumbError(this)">
+    <div class="filter-tabs reveal">
+      <span class="filter-indicator"></span>
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="content">Content</button>
+      <button class="filter-tab" data-filter="medical">Medical</button>
+      <button class="filter-tab" data-filter="motion">Motion Graphic</button>
+    </div>
+
+    <div class="work-list" id="workList">
+
+      <a class="work-item reveal" data-cat="content" href="https://drive.google.com/file/d/1Dx9OaJMf3uBjk_UV3BXqNj0QSEuInqzk/view?usp=drive_link" onclick="return openVideoModal(event, 'drive', '1Dx9OaJMf3uBjk_UV3BXqNj0QSEuInqzk')">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1Dx9OaJMf3uBjk_UV3BXqNj0QSEuInqzk&sz=w1200" alt="Marketing ads edit" loading="lazy" onerror="handleThumbError(this)">
         <div class="shade"></div>
         <span class="cat">Marketing</span>
         <span class="idx">1</span>
         <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="watch-hint">▶ Watch</span>
         <div class="caption">
           <div class="title">Marketing</div>
         </div>
       </a>
 
-      <a class="work-item reveal" style="transition-delay:.1s" href="https://drive.google.com/file/d/1aSYDAWIBm8yWtco5vWr2XKJymEllNJhT/view?usp=drive_link" onclick="return openVideoModal(event, &quot;1aSYDAWIBm8yWtco5vWr2XKJymEllNJhT&quot;)">
-        <img class="thumb" src="https://drive.google.com/thumbnail?id=1aSYDAWIBm8yWtco5vWr2XKJymEllNJhT&sz=w800" alt="Clinic reel edit" loading="lazy" onerror="handleThumbError(this)">
+      <a class="work-item reveal" data-cat="content" style="transition-delay:.06s" href="https://drive.google.com/file/d/1fGf3Ywh2BH-uVsCq0tVs2m3oD7QRUsUz/view?usp=drive_link" onclick="return openVideoModal(event, 'drive', '1fGf3Ywh2BH-uVsCq0tVs2m3oD7QRUsUz')">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1fGf3Ywh2BH-uVsCq0tVs2m3oD7QRUsUz&sz=w1200" alt="Pharmacy reel" loading="lazy" onerror="handleThumbError(this)">
         <div class="shade"></div>
-        <span class="cat">Medical</span>
+        <span class="cat">Pharmacy</span>
         <span class="idx">2</span>
         <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="watch-hint">▶ Watch</span>
         <div class="caption">
-          <div class="title">Clinic</div>
+          <div class="title">Pharmacy</div>
         </div>
       </a>
 
-      <a class="work-item reveal" style="transition-delay:.2s" href="https://drive.google.com/file/d/1k5hNMJ7hv9MzBpJGmIk53ShW2sr4bUK1/view?usp=drive_link" onclick="return openVideoModal(event, &quot;1k5hNMJ7hv9MzBpJGmIk53ShW2sr4bUK1&quot;)">
-        <img class="thumb" src="https://drive.google.com/thumbnail?id=1k5hNMJ7hv9MzBpJGmIk53ShW2sr4bUK1&sz=w800" alt="Clinic social content" loading="lazy" onerror="handleThumbError(this)">
-        <div class="shade"></div>
-        <span class="cat">Medical</span>
-        <span class="idx">3</span>
-        <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-        <div class="caption">
-          <div class="title">Clinic</div>
-        </div>
-      </a>
-
-      <a class="work-item reveal" style="transition-delay:.3s" href="https://drive.google.com/file/d/1Lm6mL2yY1cAMpj3tDpRSX2stM4OlEAho/view?usp=drive_link" onclick="return openVideoModal(event, &quot;1Lm6mL2yY1cAMpj3tDpRSX2stM4OlEAho&quot;)">
-        <img class="thumb" src="https://drive.google.com/thumbnail?id=1Lm6mL2yY1cAMpj3tDpRSX2stM4OlEAho&sz=w800" alt="Clinic promotional video" loading="lazy" onerror="handleThumbError(this)">
-        <div class="shade"></div>
-        <span class="cat">Medical</span>
-        <span class="idx">4</span>
-        <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-        <div class="caption">
-          <div class="title">Clinic</div>
-        </div>
-      </a>
-
-      <a class="work-item reveal" style="transition-delay:.4s" href="https://drive.google.com/file/d/1CV0L2FZgpd2GKP-oqm4uYGXPHRiq9jfm/view?usp=drive_link" onclick="return openVideoModal(event, &quot;1CV0L2FZgpd2GKP-oqm4uYGXPHRiq9jfm&quot;)">
-        <img class="thumb" src="https://drive.google.com/thumbnail?id=1CV0L2FZgpd2GKP-oqm4uYGXPHRiq9jfm&sz=w800" alt="Clinic long-form edit" loading="lazy" onerror="handleThumbError(this)">
-        <div class="shade"></div>
-        <span class="cat">Medical</span>
-        <span class="idx">5</span>
-        <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-        <div class="caption">
-          <div class="title">Clinic</div>
-        </div>
-      </a>
-
-      <a class="work-item reveal" style="transition-delay:.5s" href="https://drive.google.com/file/d/1DaQc-8bMbxqfGhZpci-AhHYp9tNqZU-U/view?usp=drive_link" onclick="return openVideoModal(event, &quot;1DaQc-8bMbxqfGhZpci-AhHYp9tNqZU-U&quot;)">
-        <img class="thumb" src="https://drive.google.com/thumbnail?id=1DaQc-8bMbxqfGhZpci-AhHYp9tNqZU-U&sz=w800" alt="Restaurant reel" loading="lazy" onerror="handleThumbError(this)">
-        <div class="shade"></div>
-        <span class="cat">Restaurant</span>
-        <span class="idx">6</span>
-        <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-        <div class="caption">
-          <div class="title">Restaurant</div>
-        </div>
-      </a>
-
-      <a class="work-item reveal" style="transition-delay:.6s" href="https://drive.google.com/file/d/1uEWFwHDFebvr-mTRFX3lWLFUSNxnES8S/view?usp=drive_link" onclick="return openVideoModal(event, &quot;1uEWFwHDFebvr-mTRFX3lWLFUSNxnES8S&quot;)">
-        <img class="thumb" src="https://drive.google.com/thumbnail?id=1uEWFwHDFebvr-mTRFX3lWLFUSNxnES8S&sz=w800" alt="Coffee shop reel" loading="lazy" onerror="handleThumbError(this)">
+      <a class="work-item reveal" data-cat="content" style="transition-delay:.12s" href="https://drive.google.com/file/d/1uEWFwHDFebvr-mTRFX3lWLFUSNxnES8S/view?usp=drive_link" onclick="return openVideoModal(event, 'drive', '1uEWFwHDFebvr-mTRFX3lWLFUSNxnES8S')">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1uEWFwHDFebvr-mTRFX3lWLFUSNxnES8S&sz=w1200" alt="Coffee shop reel" loading="lazy" onerror="handleThumbError(this)">
         <div class="shade"></div>
         <span class="cat">Coffee</span>
-        <span class="idx">7</span>
+        <span class="idx">3</span>
         <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="watch-hint">▶ Watch</span>
         <div class="caption">
           <div class="title">Coffee</div>
         </div>
       </a>
 
-      <a class="work-item reveal" style="transition-delay:.7s" href="https://drive.google.com/file/d/1fGf3Ywh2BH-uVsCq0tVs2m3oD7QRUsUz/view?usp=drive_link" onclick="return openVideoModal(event, &quot;1fGf3Ywh2BH-uVsCq0tVs2m3oD7QRUsUz&quot;)">
-        <img class="thumb" src="https://drive.google.com/thumbnail?id=1fGf3Ywh2BH-uVsCq0tVs2m3oD7QRUsUz&sz=w800" alt="Pharmacy reel" loading="lazy" onerror="handleThumbError(this)">
+      <a class="work-item reveal" data-cat="content" style="transition-delay:.18s" href="https://drive.google.com/file/d/1DaQc-8bMbxqfGhZpci-AhHYp9tNqZU-U/view?usp=drive_link" onclick="return openVideoModal(event, 'drive', '1DaQc-8bMbxqfGhZpci-AhHYp9tNqZU-U')">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1DaQc-8bMbxqfGhZpci-AhHYp9tNqZU-U&sz=w1200" alt="Restaurant reel" loading="lazy" onerror="handleThumbError(this)">
         <div class="shade"></div>
-        <span class="cat">Pharmacy</span>
+        <span class="cat">Restaurant</span>
+        <span class="idx">4</span>
+        <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="watch-hint">▶ Watch</span>
+        <div class="caption">
+          <div class="title">Restaurant</div>
+        </div>
+      </a>
+
+      <a class="work-item reveal" data-cat="medical" style="transition-delay:.24s" href="https://drive.google.com/file/d/1aSYDAWIBm8yWtco5vWr2XKJymEllNJhT/view?usp=drive_link" onclick="return openVideoModal(event, 'drive', '1aSYDAWIBm8yWtco5vWr2XKJymEllNJhT')">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1aSYDAWIBm8yWtco5vWr2XKJymEllNJhT&sz=w1200" alt="Clinic reel edit" loading="lazy" onerror="handleThumbError(this)">
+        <div class="shade"></div>
+        <span class="cat">Medical</span>
+        <span class="idx">5</span>
+        <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="watch-hint">▶ Watch</span>
+        <div class="caption">
+          <div class="title">Clinic</div>
+        </div>
+      </a>
+
+      <a class="work-item reveal" data-cat="medical" style="transition-delay:.3s" href="https://drive.google.com/file/d/1k5hNMJ7hv9MzBpJGmIk53ShW2sr4bUK1/view?usp=drive_link" onclick="return openVideoModal(event, 'drive', '1k5hNMJ7hv9MzBpJGmIk53ShW2sr4bUK1')">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1k5hNMJ7hv9MzBpJGmIk53ShW2sr4bUK1&sz=w1200" alt="Clinic social content" loading="lazy" onerror="handleThumbError(this)">
+        <div class="shade"></div>
+        <span class="cat">Medical</span>
+        <span class="idx">6</span>
+        <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="watch-hint">▶ Watch</span>
+        <div class="caption">
+          <div class="title">Clinic</div>
+        </div>
+      </a>
+
+      <a class="work-item reveal" data-cat="medical" style="transition-delay:.36s" href="https://drive.google.com/file/d/1Lm6mL2yY1cAMpj3tDpRSX2stM4OlEAho/view?usp=drive_link" onclick="return openVideoModal(event, 'drive', '1Lm6mL2yY1cAMpj3tDpRSX2stM4OlEAho')">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1Lm6mL2yY1cAMpj3tDpRSX2stM4OlEAho&sz=w1200" alt="Clinic promotional video" loading="lazy" onerror="handleThumbError(this)">
+        <div class="shade"></div>
+        <span class="cat">Medical</span>
+        <span class="idx">7</span>
+        <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="watch-hint">▶ Watch</span>
+        <div class="caption">
+          <div class="title">Clinic</div>
+        </div>
+      </a>
+
+      <a class="work-item reveal" data-cat="medical" style="transition-delay:.42s" href="https://drive.google.com/file/d/1CV0L2FZgpd2GKP-oqm4uYGXPHRiq9jfm/view?usp=drive_link" onclick="return openVideoModal(event, 'drive', '1CV0L2FZgpd2GKP-oqm4uYGXPHRiq9jfm')">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1CV0L2FZgpd2GKP-oqm4uYGXPHRiq9jfm&sz=w1200" alt="Clinic long-form edit" loading="lazy" onerror="handleThumbError(this)">
+        <div class="shade"></div>
+        <span class="cat">Medical</span>
         <span class="idx">8</span>
         <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="watch-hint">▶ Watch</span>
         <div class="caption">
-          <div class="title">Pharmacy</div>
+          <div class="title">Clinic</div>
+        </div>
+      </a>
+
+      <a class="work-item reveal" data-cat="motion" style="transition-delay:.48s" href="https://drive.google.com/file/d/1pOjnfzXNTNBDKmTlvIfB6oYv26WnwrmU/view?usp=sharing" onclick="return openVideoModal(event, 'drive', '1pOjnfzXNTNBDKmTlvIfB6oYv26WnwrmU')">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1pOjnfzXNTNBDKmTlvIfB6oYv26WnwrmU&sz=w1200" alt="Motion graphic edit" loading="lazy" onerror="handleThumbError(this)">
+        <div class="shade"></div>
+        <span class="cat">Motion Graphic</span>
+        <span class="idx">9</span>
+        <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="watch-hint">▶ Watch</span>
+        <div class="caption">
+          <div class="title">Motion Graphic</div>
+        </div>
+      </a>
+
+      <a class="work-item reveal" data-cat="motion" style="transition-delay:.54s" href="https://drive.google.com/file/d/1TCJFii_IxwFY9Hc1EWcqBVP2fr-W7vT0/view?usp=sharing" onclick="return openVideoModal(event, 'drive', '1TCJFii_IxwFY9Hc1EWcqBVP2fr-W7vT0')">
+        <img class="thumb" src="https://drive.google.com/thumbnail?id=1TCJFii_IxwFY9Hc1EWcqBVP2fr-W7vT0&sz=w1200" alt="Motion graphic edit" loading="lazy" onerror="handleThumbError(this)">
+        <div class="shade"></div>
+        <span class="cat">Motion Graphic</span>
+        <span class="idx">10</span>
+        <span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="watch-hint">▶ Watch</span>
+        <div class="caption">
+          <div class="title">Motion Graphic</div>
         </div>
       </a>
 
@@ -642,18 +716,37 @@
       <svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 6l12 12M18 6L6 18" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
     </button>
     <div class="video-modal-body">
+      <video id="videoModalPlayer" controls playsinline style="display:none;"></video>
       <iframe id="videoModalIframe" src="" allow="autoplay; fullscreen" allowfullscreen frameborder="0"></iframe>
     </div>
   </div>
 </div>
 
 <script>
-  // video lightbox modal
+  // video lightbox modal — supports self-hosted files, YouTube, or Drive
   const videoModal = document.getElementById('videoModal');
   const videoModalIframe = document.getElementById('videoModalIframe');
-  function openVideoModal(e, fileId){
+  const videoModalPlayer = document.getElementById('videoModalPlayer');
+
+  function openVideoModal(e, type, value){
     if(e) e.preventDefault();
-    videoModalIframe.src = 'https://drive.google.com/file/d/' + fileId + '/preview';
+    if(type === 'src'){
+      videoModalPlayer.src = value;
+      videoModalPlayer.style.display = 'block';
+      videoModalIframe.style.display = 'none';
+      videoModalIframe.src = '';
+      videoModalPlayer.play().catch(()=>{});
+    } else {
+      const url = type === 'yt'
+        ? 'https://www.youtube.com/embed/' + value + '?autoplay=1&rel=0'
+        : 'https://drive.google.com/file/d/' + value + '/preview';
+      videoModalIframe.src = url;
+      videoModalIframe.style.display = 'block';
+      videoModalPlayer.style.display = 'none';
+      videoModalPlayer.pause();
+      videoModalPlayer.removeAttribute('src');
+      videoModalPlayer.load();
+    }
     videoModal.classList.add('open');
     document.body.style.overflow = 'hidden';
     return false;
@@ -661,10 +754,47 @@
   function closeVideoModal(){
     videoModal.classList.remove('open');
     document.body.style.overflow = '';
-    setTimeout(()=>{ videoModalIframe.src = ''; }, 300);
+    setTimeout(()=>{
+      videoModalIframe.src = '';
+      videoModalPlayer.pause();
+      videoModalPlayer.removeAttribute('src');
+      videoModalPlayer.load();
+    }, 300);
   }
   document.addEventListener('keydown', (e)=>{
     if(e.key === 'Escape') closeVideoModal();
+  });
+
+  // work section filter tabs
+  const filterTabs = document.querySelectorAll('.filter-tab');
+  const filterIndicator = document.querySelector('.filter-indicator');
+  const workItems = document.querySelectorAll('#workList .work-item');
+
+  function moveFilterIndicator(tab){
+    if(!tab) return;
+    const rect = tab.getBoundingClientRect();
+    const parentRect = tab.parentElement.getBoundingClientRect();
+    filterIndicator.style.width = rect.width + 'px';
+    filterIndicator.style.left = (rect.left - parentRect.left) + 'px';
+  }
+
+  filterTabs.forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      filterTabs.forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      moveFilterIndicator(tab);
+
+      const filter = tab.dataset.filter;
+      workItems.forEach(item=>{
+        const show = filter === 'all' || item.dataset.cat === filter;
+        item.classList.toggle('filtered-out', !show);
+      });
+    });
+  });
+
+  window.addEventListener('load', ()=>{
+    const activeTab = document.querySelector('.filter-tab.active');
+    moveFilterIndicator(activeTab);
   });
 
   // scroll progress
