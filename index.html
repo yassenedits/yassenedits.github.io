@@ -682,20 +682,35 @@
     content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
     background:linear-gradient(115deg, rgba(255,255,255,.26) 0%, rgba(255,255,255,0) 32%, rgba(255,255,255,0) 68%, rgba(255,255,255,.12) 100%);
   }
-  .ic-inner{position:relative; z-index:1; width:100%; padding:0 36px; display:flex; flex-direction:column; gap:15px; transition:opacity .28s ease;}
+  .ic-inner{position:relative; z-index:1; width:100%; padding:0 36px; display:flex; flex-direction:column; gap:14px; transition:opacity .28s ease;}
   .intro-capsule.done .ic-inner{opacity:0;}
   .ic-row{display:flex; align-items:center; justify-content:space-between; gap:16px;}
   .ic-logo{height:34px; width:auto; object-fit:contain;}
-  .ic-rec{
-    display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:999px;
-    font-size:12px; font-weight:600; letter-spacing:.08em; color:#fff; white-space:nowrap;
-    background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.18);
+  .ic-liquid{position:absolute; left:0; right:0; top:0; height:100%; z-index:0; pointer-events:none; transition:opacity .45s ease;}
+  .intro-capsule.done .ic-liquid{opacity:0;}
+  .ic-body{position:absolute; inset:0; background:linear-gradient(180deg, rgba(205,220,255,.42), rgba(150,170,255,.24));}
+  .ic-wave{position:absolute; left:0; right:0; top:-17px; height:18px; background-repeat:repeat-x;}
+  .ic-wave1{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 18' preserveAspectRatio='none'%3E%3Cpath d='M0 9 Q30 -3 60 9 T120 9 V18 H0 Z' fill='rgba(205,220,255,0.42)'/%3E%3Cpath d='M0 9 Q30 -3 60 9 T120 9' fill='none' stroke='rgba(255,255,255,0.75)' stroke-width='1.2'/%3E%3C/svg%3E"); background-size:120px 18px; animation:waveMove 2.2s linear infinite;}
+  .ic-wave2{top:-22px; height:18px; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 18' preserveAspectRatio='none'%3E%3Cpath d='M0 9 Q30 -3 60 9 T120 9 V18 H0 Z' fill='rgba(150,175,255,0.30)'/%3E%3C/svg%3E"); background-size:170px 18px; animation:waveMove2 3.4s linear infinite;}
+  @keyframes waveMove{to{background-position-x:120px;}}
+  @keyframes waveMove2{to{background-position-x:-170px;}}
+  .ic-pct{display:inline-flex; align-items:baseline; gap:2px; color:#fff; text-shadow:0 1px 10px rgba(0,0,0,.35);}
+  .ic-pct b{font-size:30px; font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums; min-width:1.7ch; text-align:right;}
+  .ic-pct i{font-style:normal; font-size:15px; font-weight:500; opacity:.75;}
+  .ic-chip{
+    position:relative; align-self:flex-start; width:118px; height:28px; overflow:hidden; border-radius:999px;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.3);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.45);
   }
-  .ic-rec i{width:8px; height:8px; border-radius:50%; background:#ff4d4d; box-shadow:0 0 8px rgba(255,77,77,.9); animation:recBlink 1s steps(2,jump-none) infinite;}
-  .ic-rec b{font-weight:600; font-variant-numeric:tabular-nums; letter-spacing:.04em;}
-  @keyframes recBlink{50%{opacity:.25;}}
-  .ic-bar{height:3px; border-radius:3px; background:rgba(255,255,255,.14); overflow:hidden;}
-  .ic-bar span{display:block; height:100%; width:0; border-radius:inherit; background:linear-gradient(90deg, rgba(255,255,255,.5), #fff); box-shadow:0 0 10px rgba(255,255,255,.6);}
+  .ic-words{position:absolute; inset:0;}
+  .ic-words .w{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:11.5px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:#fff; text-shadow:0 1px 8px rgba(0,0,0,.3);
+    opacity:0; transform:translateY(70%); filter:blur(6px);
+    transition:opacity .35s ease, transform .45s cubic-bezier(.16,1,.3,1), filter .35s ease;
+  }
+  .ic-words .w.on{opacity:1; transform:none; filter:none;}
+  .ic-words .w.out{opacity:0; transform:translateY(-70%); filter:blur(6px);}
   .intro-skip{
     position:fixed; bottom:34px; left:50%; translate:-50% 0; z-index:3; cursor:pointer;
     padding:9px 20px; border-radius:999px; font:600 13px 'Inter', sans-serif; letter-spacing:.04em; color:rgba(255,255,255,.75);
@@ -713,7 +728,7 @@
   @media (max-width:640px){
     .ic-inner{padding:0 24px; gap:12px;}
     .ic-logo{height:28px;}
-    .ic-rec{font-size:11px; padding:5px 10px;}
+    .ic-pct b{font-size:26px;}
   }
 </style>
 <script>
@@ -737,12 +752,19 @@
 
 <div id="introScreen" class="intro-screen" aria-hidden="true">
   <div class="intro-capsule" id="introCapsule">
+    <div class="ic-liquid" id="icLiquid" aria-hidden="true">
+      <span class="ic-wave ic-wave2"></span>
+      <span class="ic-wave ic-wave1"></span>
+      <span class="ic-body"></span>
+    </div>
     <div class="ic-inner">
       <div class="ic-row">
         <img class="ic-logo" alt="">
-        <span class="ic-rec"><i></i>REC <b id="icTime">00:00:00:00</b></span>
+        <span class="ic-pct"><b id="icPct">0</b><i>%</i></span>
       </div>
-      <div class="ic-bar"><span id="icFill"></span></div>
+      <span class="ic-chip"><span class="ic-words" id="icWords">
+        <span class="w on">Reels</span><span class="w">Ads</span><span class="w">Motion</span><span class="w">Color</span>
+      </span></span>
     </div>
   </div>
   <button class="intro-skip" id="introSkip" type="button">Skip</button>
@@ -1393,13 +1415,15 @@
     const logo = cap.querySelector('.ic-logo');
     const brand = document.querySelector('.brand-logo');
     if(brand && logo) logo.src = brand.src;
-    const timeEl = document.getElementById('icTime');
-    const fill = document.getElementById('icFill');
+    const pctEl = document.getElementById('icPct');
+    const liquid = document.getElementById('icLiquid');
+    const words = [...document.querySelectorAll('#icWords .w')];
+    let wordIdx = 0;
     const skip = document.getElementById('introSkip');
     const header = document.querySelector('header');
     const timers = [];
     let stage = 0, counting = false, raf = 0, t0 = 0;
-    const COUNT_MS = 1500, TC_MS = 2000;
+    const COUNT_MS = 1500;
     const T = (fn, ms)=>timers.push(setTimeout(fn, ms));
     const pad = n => String(n).padStart(2,'0');
 
@@ -1409,16 +1433,23 @@
       cap.style.width = w + 'px'; cap.style.height = h + 'px';
     }
     const vw = window.innerWidth, vh = window.innerHeight;
-    const W = Math.min(440, vw - 40), H = vw <= 640 ? 100 : 116;
+    const W = Math.min(440, vw - 40), H = vw <= 640 ? 112 : 128;
     place((vw - W) / 2, (vh - H) / 2, W, H);
     requestAnimationFrame(()=>requestAnimationFrame(()=>cap.classList.add('in')));
 
     function setProgress(p){
-      const ms = p * TC_MS;
-      const sec = Math.floor(ms / 1000), ff = Math.floor((ms % 1000) / 1000 * 24);
-      timeEl.textContent = '00:00:' + pad(sec) + ':' + pad(ff);
-      fill.style.width = (p * 100) + '%';
+      pctEl.textContent = Math.round(p * 100);
+      liquid.style.transform = 'translateY(' + ((1 - p) * (H + 24)) + 'px)';
+      const idx = Math.min(words.length - 1, Math.floor(p * words.length));
+      if(idx !== wordIdx){
+        words[wordIdx].classList.remove('on'); words[wordIdx].classList.add('out');
+        const prev = words[wordIdx];
+        setTimeout(()=>prev.classList.remove('out'), 450);
+        words[idx].classList.add('on');
+        wordIdx = idx;
+      }
     }
+    setProgress(0);
     function tick(ts){
       if(!t0) t0 = ts;
       const p = Math.min((ts - t0) / COUNT_MS, 1);
