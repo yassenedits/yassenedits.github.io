@@ -651,75 +651,77 @@
     .reveal{filter:none; transform:translateY(16px);}
   }
 
-  /* ===== INTRO: glass phone with quick cuts that lands in the hero ===== */
+  /* ===== INTRO: raw footage -> edited, a playhead that colors the real site ===== */
   html:not(.intro-active) .intro-screen{display:none;}
-  html.intro-active header{opacity:0; visibility:hidden; animation:hdrFailsafe 0s 9s forwards;}
-  @keyframes hdrFailsafe{to{opacity:1; visibility:visible;}}
   .intro-screen{
-    position:fixed; inset:0; z-index:500; background-color:#000;
-    transition:background-color .8s ease;
-    animation:introFailsafe .3s 9s forwards;
+    position:fixed; inset:0; z-index:500; --x:0px; cursor:ew-resize;
+    touch-action:none; user-select:none; -webkit-user-select:none;
+    transition:opacity .45s ease; animation:introFailsafe .3s 9s forwards;
   }
+  .intro-screen.out{opacity:0; pointer-events:none;}
   @keyframes introFailsafe{to{opacity:0; visibility:hidden;}}
-  .intro-screen::before{
-    content:''; position:absolute; inset:0; pointer-events:none; transition:opacity .8s ease;
-    background:
-      radial-gradient(560px circle at 50% 46%, rgba(130,150,255,.30), transparent 70%),
-      radial-gradient(520px circle at 82% 78%, rgba(190,140,255,.18), transparent 70%);
+  .raw-layer{
+    position:absolute; top:0; bottom:0; right:0; left:var(--x); overflow:hidden;
+    backdrop-filter:saturate(.04) contrast(.58) brightness(.92) blur(1.2px);
+    -webkit-backdrop-filter:saturate(.04) contrast(.58) brightness(.92) blur(1.2px);
   }
-  .intro-screen.morph{background-color:rgba(0,0,0,0);}
-  .intro-screen.morph::before{opacity:0;}
-  .intro-phone{
-    position:fixed; z-index:2; box-sizing:border-box; padding:6px; border-radius:42px;
-    background:linear-gradient(160deg, rgba(255,255,255,.34), rgba(255,255,255,.08));
-    backdrop-filter:blur(18px) saturate(200%); -webkit-backdrop-filter:blur(18px) saturate(200%);
-    border:1px solid rgba(255,255,255,.4);
-    box-shadow:0 40px 80px -28px rgba(0,0,0,.85), 0 0 60px -10px rgba(150,170,255,.35), inset 0 1.5px 1px rgba(255,255,255,.6);
-    opacity:0; transform:translateY(28px) scale(.9); filter:blur(12px);
-    transition:
-      opacity .6s ease, transform .9s cubic-bezier(.16,1,.3,1), filter .6s ease,
-      left .95s cubic-bezier(.65,0,.2,1), top .95s cubic-bezier(.65,0,.2,1),
-      width .95s cubic-bezier(.65,0,.2,1), height .95s cubic-bezier(.65,0,.2,1);
+  .raw-wash{position:absolute; top:0; right:0; width:100vw; height:100%; background:rgba(135,148,170,.2);}
+  .raw-grain{
+    position:absolute; top:-10%; right:-10vw; width:120vw; height:120%; opacity:.17; pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E"); animation:rawGrain .5s steps(1) infinite;
   }
-  .intro-phone.in{opacity:1; transform:none; filter:none;}
-  .intro-phone.land{opacity:0; transition:opacity .45s ease;}
-  .ip-screen{position:relative; width:100%; height:100%; border-radius:36px; overflow:hidden; background:#0b0b0f;}
-  .ip-screen::after{
-    content:''; position:absolute; inset:0; pointer-events:none; z-index:2;
-    background:linear-gradient(115deg, rgba(255,255,255,.2) 0%, rgba(255,255,255,0) 36%);
+  @keyframes rawGrain{
+    0%{transform:translate(0,0);} 20%{transform:translate(-3%,2%);} 40%{transform:translate(2%,-3%);}
+    60%{transform:translate(-2%,-1%);} 80%{transform:translate(3%,3%);} 100%{transform:translate(0,0);}
   }
-  .ip-clip{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0;}
-  .ip-clip.on{opacity:1; animation:ipPunch .9s cubic-bezier(.16,1,.3,1) both;}
-  @keyframes ipPunch{from{transform:scale(1.14);} to{transform:scale(1);}}
-  .ip-flash{position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:1;}
-  .ip-flash.go{animation:ipFlash .3s ease-out;}
-  @keyframes ipFlash{from{opacity:.4;} to{opacity:0;}}
-  .ip-story{position:absolute; top:34px; left:14px; right:14px; display:flex; gap:5px; z-index:3;}
-  .ip-story i{flex:1; height:3px; border-radius:3px; background:rgba(255,255,255,.32); overflow:hidden; font-style:normal;}
-  .ip-story b{display:block; width:0; height:100%; background:#fff; border-radius:3px;}
-  .ip-island{position:absolute; top:11px; left:50%; width:34%; height:15px; translate:-50% 0; border-radius:999px; background:#000; z-index:3;}
-  .ip-bar{position:absolute; bottom:8px; left:50%; width:34%; height:4px; translate:-50% 0; border-radius:4px; background:rgba(255,255,255,.7); z-index:3;}
-  .intro-logo{position:fixed; z-index:2; left:50%; translate:-50% 0; height:32px; width:auto; opacity:0; transition:opacity .5s ease;}
-  .intro-logo.in{opacity:.92;}
-  .intro-logo.gone{opacity:0; transition-duration:.25s;}
+  .raw-head{
+    position:absolute; top:0; bottom:0; left:0; width:60px; pointer-events:none; will-change:transform;
+    transform:translateX(calc(var(--x) - 30px));
+  }
+  .rh-line{
+    position:absolute; left:50%; top:0; bottom:0; width:2px; translate:-50% 0;
+    background:linear-gradient(180deg, transparent, #fff 10%, #fff 90%, transparent);
+    box-shadow:0 0 14px 2px rgba(190,205,255,.65), 0 0 3px #fff;
+  }
+  .rh-grip{
+    position:absolute; left:50%; top:50%; width:56px; height:56px; translate:-50% -50%; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(180deg, rgba(255,255,255,.4), rgba(255,255,255,.14));
+    backdrop-filter:blur(16px) saturate(200%); -webkit-backdrop-filter:blur(16px) saturate(200%);
+    border:1px solid rgba(255,255,255,.55);
+    box-shadow:inset 0 1.5px 1px rgba(255,255,255,.75), inset 0 -1px 1px rgba(255,255,255,.2), 0 10px 26px rgba(0,0,0,.5);
+  }
+  .rh-grip svg{filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));}
+  .rh-tag{
+    position:absolute; top:calc(50% - 78px); padding:6px 14px; border-radius:999px; white-space:nowrap;
+    font:700 11.5px 'Inter', sans-serif; letter-spacing:.16em; color:#fff;
+    background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.08));
+    backdrop-filter:blur(14px) saturate(190%); -webkit-backdrop-filter:blur(14px) saturate(190%);
+    border:1px solid rgba(255,255,255,.34); box-shadow:inset 0 1px 0 rgba(255,255,255,.5);
+    transition:opacity .25s ease;
+  }
+  .rh-tag.edited{right:calc(50% + 14px);}
+  .rh-tag.raw{left:calc(50% + 14px);}
+  .intro-screen.near-left .rh-tag.edited, .intro-screen.near-right .rh-tag.raw{opacity:0;}
+  .rh-hint{
+    position:absolute; left:calc(50% + 42px); top:50%; translate:0 -50%; white-space:nowrap;
+    font:600 11px 'Inter', sans-serif; letter-spacing:.2em; color:rgba(255,255,255,.85); text-shadow:0 1px 8px rgba(0,0,0,.6);
+    transition:opacity .4s ease;
+  }
+  .intro-screen.go .rh-hint{opacity:0;}
   .intro-skip{
     position:fixed; bottom:34px; left:50%; translate:-50% 0; z-index:3; cursor:pointer;
-    padding:9px 20px; border-radius:999px; font:600 13px 'Inter', sans-serif; letter-spacing:.04em; color:rgba(255,255,255,.75);
-    background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
+    padding:9px 20px; border-radius:999px; font:600 13px 'Inter', sans-serif; letter-spacing:.04em; color:rgba(255,255,255,.8);
+    background:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.06));
     backdrop-filter:blur(16px) saturate(190%); -webkit-backdrop-filter:blur(16px) saturate(190%);
-    border:1px solid rgba(255,255,255,.22); box-shadow:inset 0 1px 0 rgba(255,255,255,.4);
+    border:1px solid rgba(255,255,255,.24); box-shadow:inset 0 1px 0 rgba(255,255,255,.4);
     transition:opacity .3s ease, color .2s ease, scale .2s ease;
   }
   .intro-skip:hover{color:#fff; scale:1.05;}
-  .intro-screen.morph .intro-skip{opacity:0; pointer-events:none;}
-  /* hero middle phone waits for the intro phone to land on it */
-  .phones.phones-hold .phone-slot-2{opacity:0 !important; animation:none !important;}
-  .phones.phones-intro .phone-slot-2{opacity:1 !important; animation:none;}
-  .phones.phones-intro.phones-float .phone-slot-2{animation:slotFloat2 7s ease-in-out infinite;}
-  header.nav-reveal nav{animation:navDrop .8s cubic-bezier(.16,1,.3,1) backwards;}
-  header.nav-reveal nav > *:not(.lg-shine){animation:navKid .6s cubic-bezier(.16,1,.3,1) .12s backwards;}
-  @keyframes navDrop{from{opacity:0; transform:translateY(-28px) scale(.97);}}
-  @keyframes navKid{from{opacity:0; transform:translateY(-6px);}}
+  @media (max-width:640px){
+    .rh-grip{width:50px; height:50px;}
+    .rh-tag{font-size:10.5px; padding:5px 11px; top:calc(50% - 72px);}
+  }
 
   /* ===== How it works ===== */
   .process-head{margin-top:72px;}
@@ -891,18 +893,14 @@
 <body>
 
 <div id="introScreen" class="intro-screen" aria-hidden="true">
-  <div class="intro-phone" id="introPhone">
-    <div class="ip-screen">
-      <video class="ip-clip" src="intro-1.mp4" muted playsinline preload="auto"></video>
-      <video class="ip-clip" src="intro-2.mp4" muted playsinline preload="auto"></video>
-      <video class="ip-clip" src="intro-3.mp4" muted playsinline preload="auto"></video>
-      <span class="ip-flash"></span>
-      <span class="ip-story"><i><b></b></i><i><b></b></i><i><b></b></i></span>
-      <span class="ip-island"></span>
-      <span class="ip-bar"></span>
-    </div>
+  <div class="raw-layer"><span class="raw-wash"></span><span class="raw-grain"></span></div>
+  <div class="raw-head">
+    <span class="rh-line"></span>
+    <span class="rh-tag edited">EDITED</span>
+    <span class="rh-tag raw">RAW</span>
+    <span class="rh-grip"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <span class="rh-hint">DRAG</span>
   </div>
-  <img class="intro-logo" id="introLogo" alt="">
   <button class="intro-skip" id="introSkip" type="button">Skip</button>
 </div>
 <div class="scroll-bar"></div>
@@ -1652,99 +1650,72 @@
     if(document.fonts && document.fonts.ready) document.fonts.ready.then(fix);
   })();
 
-  // ===== intro: glass phone, quick cuts, lands on the hero's middle phone =====
+  // ===== intro: raw -> edited. A playhead sweeps across the REAL site and colors it =====
   (function(){
     const root = document.documentElement;
     const intro = document.getElementById('introScreen');
-    const phone = document.getElementById('introPhone');
     function startSite(){ window.__introDone = true; playHeroAnim(); }
-    if(!root.classList.contains('intro-active') || !intro || !phone){ startSite(); return; }
+    if(!root.classList.contains('intro-active') || !intro){ startSite(); return; }
 
-    const logo = document.getElementById('introLogo');
-    const brand = document.querySelector('.brand-logo');
-    if(brand && logo) logo.src = brand.src;
-    const clips = [...phone.querySelectorAll('.ip-clip')];
-    const bars = [...phone.querySelectorAll('.ip-story b')];
-    const flash = phone.querySelector('.ip-flash');
     const skip = document.getElementById('introSkip');
-    const header = document.querySelector('header');
-    const hero = document.querySelector('.phones');
-    const timers = [];
-    let stage = 0, started = false;
-    const CUT_MS = 800, FIRST = 350;
-    const T = (fn, ms)=>timers.push(setTimeout(fn, ms));
+    let W = window.innerWidth, x = 0, raf = 0, dragging = false, done = false, startT = 0;
+    const easeInOut = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+    const easeOut = t => 1 - Math.pow(1 - t, 3);
 
     try{ window.scrollTo({top:0, behavior:'instant'}); }catch(e){ window.scrollTo(0,0); }
     document.body.style.overflow = 'hidden';
-    function place(x, y, w, h){
-      phone.style.left = x + 'px'; phone.style.top = y + 'px';
-      phone.style.width = w + 'px'; phone.style.height = h + 'px';
-    }
-    const vw = window.innerWidth, vh = window.innerHeight;
-    const Wd = vw <= 640 ? 190 : 220, Hd = Wd * 19.5 / 9;
-    const px = (vw - Wd) / 2, py = Math.max(18, (vh - Hd) / 2 - 16);
-    place(px, py, Wd, Hd);
-    logo.style.top = (py + Hd + 22) + 'px';
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{ phone.classList.add('in'); T(()=>logo.classList.add('in'), 250); }));
 
-    function cut(i){
-      clips.forEach(c=>c.classList.remove('on'));
-      const v = clips[i];
-      try{ v.currentTime = 0; const pr = v.play(); if(pr && pr.catch) pr.catch(()=>{}); }catch(e){}
-      v.classList.add('on');
-      flash.classList.remove('go'); void flash.offsetWidth; flash.classList.add('go');
-      bars[i].style.transition = 'width ' + CUT_MS + 'ms linear';
-      bars[i].style.width = '100%';
+    function setX(v){
+      x = Math.max(0, Math.min(W, v));
+      intro.style.setProperty('--x', x + 'px');
+      intro.classList.toggle('near-left', x < 120);
+      intro.classList.toggle('near-right', x > W - 120);
     }
-    function begin(){
-      if(started || stage) return;
-      started = true;
-      clips.forEach((c, i)=>T(()=>{ if(stage === 0) cut(i); }, FIRST + i * CUT_MS));
-      T(fly, FIRST + clips.length * CUT_MS + 80);
+    function run(dur, ease){
+      cancelAnimationFrame(raf);
+      const from = x, t0 = performance.now();
+      (function step(now){
+        const t = Math.min(1, (now - t0) / dur);
+        setX(from + (W - from) * ease(t));
+        if(dragging) return;
+        if(t < 1) raf = requestAnimationFrame(step); else end();
+      })(t0);
     }
-    const ready = Promise.all(clips.map(v=>new Promise(res=>{
-      if(v.readyState >= 2) return res(true);
-      v.addEventListener('loadeddata', ()=>res(true), {once:true});
-      v.addEventListener('error', ()=>res(false), {once:true});
-    })));
-    Promise.race([ready, new Promise(r=>setTimeout(r, 1500))]).then(begin);
-
-    function fly(){
-      if(stage >= 1) return;
-      stage = 1;
-      intro.classList.add('morph');
-      logo.classList.add('gone');
-      if(hero) hero.classList.add('phones-hold');
-      const target = document.querySelector('.phone-slot-2 .phone');
-      const r = target.getBoundingClientRect();
-      place(r.left, r.top, r.width, r.height);
-      T(startSite, 150);
-      T(land, 1000);
-    }
-    function land(){
-      if(stage >= 2) return;
-      stage = 2;
-      if(hero){ hero.classList.remove('phones-hold'); hero.classList.add('phones-intro', 'phones-float'); }
-      phone.classList.add('land');
-      T(finish, 500);
+    function end(){
+      if(done) return;
+      done = true;
+      intro.classList.add('out');
+      setTimeout(finish, 450);
     }
     function finish(){
-      if(stage >= 3) return;
-      stage = 3;
-      timers.forEach(clearTimeout);
-      clips.forEach(c=>{ try{ c.pause(); }catch(e){} });
       root.classList.remove('intro-active');
-      header.classList.add('nav-reveal');
       document.body.style.overflow = '';
-      try{ sessionStorage.setItem('introSeen','1'); }catch(e){}
+      try{ sessionStorage.setItem('introSeen', '1'); }catch(e){}
     }
-    function skipNow(){
-      if(stage >= 1) return;
-      timers.forEach(clearTimeout); timers.length = 0;
-      fly();
+
+    setX(0);
+    setTimeout(startSite, 150);
+    startT = setTimeout(()=>{ if(!dragging){ intro.classList.add('go'); run(2600, easeInOut); } }, 750);
+
+    intro.addEventListener('pointerdown', e=>{
+      if(e.target.closest('.intro-skip') || done) return;
+      dragging = true; clearTimeout(startT); cancelAnimationFrame(raf);
+      intro.classList.add('go');
+      try{ intro.setPointerCapture(e.pointerId); }catch(err){}
+      setX(e.clientX);
+    });
+    intro.addEventListener('pointermove', e=>{ if(dragging) setX(e.clientX); });
+    function release(){
+      if(!dragging) return;
+      dragging = false;
+      run(Math.max(500, 2200 * (W - x) / W), easeOut);
     }
+    intro.addEventListener('pointerup', release);
+    intro.addEventListener('pointercancel', release);
+    function skipNow(){ if(done) return; dragging = false; clearTimeout(startT); intro.classList.add('go'); run(450, easeOut); }
     skip.addEventListener('click', skipNow);
     document.addEventListener('keydown', e=>{ if(e.key === 'Escape' || e.key === 'Enter') skipNow(); });
+    window.addEventListener('resize', ()=>{ W = window.innerWidth; });
   })();
 
   // ===== stats: build odometer reels, count once when seen =====
